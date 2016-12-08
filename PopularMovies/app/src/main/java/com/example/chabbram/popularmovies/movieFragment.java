@@ -89,7 +89,7 @@ public class movieFragment extends Fragment {
         //Log.v(LOG_TAG,"The initiation of gridView");
         gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
         //Log.v(LOG_TAG,"The attachment of adapter with the gridView");
-           final String url = "https://api.themoviedb.org/3/movie/popular?api_key=66c994fe878430858f3c3fe598f439f8";
+           final String url = "https://api.themoviedb.org/3/movie/popular?";
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
