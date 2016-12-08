@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_movie_label">
+        <item>@string/label_highrated</item>
+        <item>@string/label_popularity</item>
+    </string-array>
+    <string-array name="pref_movie_value">
+        <item>@string/value_vote_avg</item>
+        <item>@string/value_popularity</item>
+    </string-array>
+</resources>

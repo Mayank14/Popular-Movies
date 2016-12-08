@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".DetailActivity$DetailFragment">
+
+    <TextView
+        android:text="TITLE : "
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/default_textView1" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/default_textView1"
+        android:id="@+id/movie_title"
+        android:layout_toRightOf="@+id/default_textView1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/default_textView1" />
+
+    <TextView
+        android:text="RELEASE DATE: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:id="@+id/default_textView2"
+        android:layout_below="@+id/default_textView1"
+        android:layout_alignLeft="@+id/default_textView1"
+        android:layout_alignStart="@+id/default_textView1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/default_textView2"
+        android:layout_toRightOf="@+id/default_textView2"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:id="@+id/movie_release"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher"
+        android:scaleType="fitXY"
+        android:id="@+id/movie_poster"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/default_textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="PLOT:"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/default_textView3"
+        android:layout_below="@+id/movie_poster"
+        android:layout_marginTop="32dp"
+        android:layout_alignLeft="@+id/default_textView2"
+        android:layout_alignStart="@+id/default_textView2" />
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:id="@+id/movie_plot"
+        android:layout_alignBaseline="@+id/default_textView3"
+        android:layout_alignBottom="@+id/default_textView3"
+        android:layout_toRightOf="@+id/default_textView3"
+        android:layout_toEndOf="@+id/default_textView3" />
+
+    <TextView
+        android:text="RATING:"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:id="@+id/default_textView4"
+        android:layout_below="@+id/movie_plot"
+        android:layout_alignLeft="@+id/default_textView3"
+        android:layout_alignStart="@+id/default_textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/movie_rating"
+        android:layout_alignBaseline="@+id/default_textView4"
+        android:layout_alignBottom="@+id/default_textView4"
+        android:layout_toRightOf="@+id/default_textView4" />
+
+</RelativeLayout>

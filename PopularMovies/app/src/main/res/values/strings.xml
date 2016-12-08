@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="default_text1">TextView1</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_setting">SettingsActivity</string>
+    <string name="label_popularity">Most Popular</string>
+    <string name="label_highrated">Highest Rated</string>
+    <string name="value_popularity">popularity</string>
+    <string name="value_vote_avg">voting</string>
+    <string name="pref_title">SORT BY</string>
+    <string name="pref_key" translatable="false">sort</string>
+</resources>
