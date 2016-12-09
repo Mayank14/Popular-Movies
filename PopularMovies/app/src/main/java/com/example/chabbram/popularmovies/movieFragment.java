@@ -69,36 +69,23 @@ public class movieFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    /*private void updatePage() {
-        fetchMovie movies=new fetchMovie();
-        movies.execute();
-    }*/
-
     @Override
     public void onStart() {
         super.onStart();
-       // updatePage();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //moviesList = new ArrayList<myMovies>(Arrays.asList(newmovies));
-        // String movieList[]={"movie_1","movie_2","movie_3","movie_4"};
-        //movieAdapter=new ArrayAdapter(getActivity(), R.layout.grid_item_movie,R.id.grid_item_forecast_imageview,movieList);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        //Log.v(LOG_TAG,"The initiation of gridView");
         gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
-        //Log.v(LOG_TAG,"The attachment of adapter with the gridView");
-           final String url = "https://api.themoviedb.org/3/movie/popular?";
+           final String url = "https://api.themoviedb.org/3/movie/popular?api_key="+BuildConfig.TMDB_API_KEY;
             JsonObjectRequest jsonRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            // the response is already constructed as a JSONObject!
                             try {
                                 Log.v(LOG_TAG, "The response is" + response.toString());
-                                //int pageCount = response.getInt("total_pages");
                                 JSONArray json = response.getJSONArray("results");
                                 for (int i = 0; i < json.length(); i++) {
                                     JSONObject jsonObject = json.getJSONObject(i);
@@ -114,13 +101,6 @@ public class movieFragment extends Fragment {
                                     movieDetails.add(new myMovies(title, release, plot, popularity, votes, avg, poster, mthumbnail));
 
                                 }
-
-                                //populating the gridview after sorting
-                            /*for(int i=0;i<movieDetails.size();i++) {
-                                titleList.add(movieDetails.get(i).getTitle());
-                                Log.v(LOG_TAG,"THE TITLE IS"+movieDetails.get(i).getTitle());
-                            }*/
-
                                 moviesList = new AndroidImageAdapter(getActivity(), new ArrayList<String>());
                                 gridView.setAdapter(moviesList);
                                 onSort();
@@ -138,14 +118,12 @@ public class movieFragment extends Fragment {
                         }
                     });
             Volley.newRequestQueue(getActivity()).add(jsonRequest);
-            //return rootView;
         return rootView;
     }
 
     public void onSort() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortby = prefs.getString(getString(R.string.pref_key),getString(R.string.value_popularity));
-        //Log.v(LOG_TAG,"THE SORT BY STRING IS"+sortby);
         ArrayList<String> imageList = new ArrayList<String>();
         if(sortby.equals("voting")){
             Collections.sort(movieDetails,new sortMovieByRating());
@@ -156,7 +134,6 @@ public class movieFragment extends Fragment {
 
         for(int i=0;i<movieDetails.size();i++) {
             imageList.add(movieDetails.get(i).getMthumbnail());
-            //Log.v(LOG_TAG,"THE TITLE IS"+movieDetails.get(i).getMthumbnail());
         }
         moviesList.clear();
         moviesList=new AndroidImageAdapter(getActivity(),imageList);
@@ -164,7 +141,6 @@ public class movieFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v(LOG_TAG,"The position is:"+position);
                 String showTitle = movieDetails.get(position).getTitle();
                 String releaseDate = movieDetails.get(position).getReleaseDate();
                 String showPoster = movieDetails.get(position).getPoster_URL();
