@@ -55,6 +55,14 @@ public class movieFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sortby = prefs.getString(getString(R.string.pref_key),getString(R.string.value_popularity));
+        onSort();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.moviefragment,menu);
     }
