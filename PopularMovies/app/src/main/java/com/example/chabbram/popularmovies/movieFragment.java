@@ -63,6 +63,8 @@ public class movieFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         if(id == R.id.action_refresh) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sortby = prefs.getString(getString(R.string.pref_key),getString(R.string.value_popularity));
             onSort();
             return true;
         }
@@ -78,87 +80,91 @@ public class movieFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         gridView = (GridView) rootView.findViewById(R.id.gridview_movie);
-           final String url = "https://api.themoviedb.org/3/movie/popular?api_key="+BuildConfig.TMDB_API_KEY;
-            JsonObjectRequest jsonRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                Log.v(LOG_TAG, "The response is" + response.toString());
-                                JSONArray json = response.getJSONArray("results");
-                                for (int i = 0; i < json.length(); i++) {
-                                    JSONObject jsonObject = json.getJSONObject(i);
-                                    String mthumbnail = "http://image.tmdb.org/t/p/w300/" + jsonObject.getString("poster_path");
-                                    String title = jsonObject.getString("title");
-                                    String backdrop = jsonObject.getString("backdrop_path");
-                                    String poster = "http://image.tmdb.org/t/p/w500/" + backdrop;
-                                    String plot = jsonObject.getString("overview");
-                                    String release = jsonObject.getString("release_date");
-                                    double popularity = jsonObject.getDouble("popularity");
-                                    int votes = jsonObject.getInt("vote_count");
-                                    double avg = jsonObject.getDouble("vote_average");
-                                    movieDetails.add(new myMovies(title, release, plot, popularity, votes, avg, poster, mthumbnail));
-
-                                }
-                                moviesList = new AndroidImageAdapter(getActivity(), new ArrayList<String>());
-                                gridView.setAdapter(moviesList);
-                                onSort();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
-            Volley.newRequestQueue(getActivity()).add(jsonRequest);
+        onSort();
         return rootView;
     }
 
     public void onSort() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sortby = prefs.getString(getString(R.string.pref_key),getString(R.string.value_popularity));
-        ArrayList<String> imageList = new ArrayList<String>();
+
         if(sortby.equals("voting")){
-            Collections.sort(movieDetails,new sortMovieByRating());
+            getResponse("top_rated");
         }
         else if(sortby.equals("popularity")) {
-            Collections.sort(movieDetails,new sortMovieByPopularity());
+            getResponse("popular");
         }
+    }
 
-        for(int i=0;i<movieDetails.size();i++) {
-            imageList.add(movieDetails.get(i).getMthumbnail());
-        }
-        moviesList.clear();
-        moviesList=new AndroidImageAdapter(getActivity(),imageList);
-        gridView.setAdapter(moviesList);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String showTitle = movieDetails.get(position).getTitle();
-                String releaseDate = movieDetails.get(position).getReleaseDate();
-                String showPoster = movieDetails.get(position).getPoster_URL();
-                String plot = movieDetails.get(position).getPlot();
-                double avg = movieDetails.get(position).getAvg();
-                Intent intent =  new Intent(getActivity(),DetailActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString("EXTRA_TITLE",showTitle);
-                extras.putString("EXTRA_DATE",releaseDate);
-                extras.putString("EXTRA_POSTER",showPoster);
-                extras.putString("EXTRA_PLOT",plot);
-                extras.putDouble("EXTRA_AVG",avg);
-                intent.putExtras(extras);
-                startActivity(intent);
-            }
+    public void getResponse(String type) {
+        movieDetails.clear();
+        final String url = "https://api.themoviedb.org/3/movie/"+type+"?api_key="+BuildConfig.TMDB_API_KEY;
+        JsonObjectRequest jsonRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
-        });
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
 
+                            Log.v(LOG_TAG, "The response is" + response.toString());
+                            JSONArray json = response.getJSONArray("results");
+                            for (int i = 0; i < json.length(); i++) {
+                                JSONObject jsonObject = json.getJSONObject(i);
+                                String mthumbnail = "http://image.tmdb.org/t/p/w300/" + jsonObject.getString("poster_path");
+                                String title = jsonObject.getString("title");
+                                String backdrop = jsonObject.getString("backdrop_path");
+                                String poster = "http://image.tmdb.org/t/p/w500/" + backdrop;
+                                String plot = jsonObject.getString("overview");
+                                String release = jsonObject.getString("release_date");
+                                double popularity = jsonObject.getDouble("popularity");
+                                int votes = jsonObject.getInt("vote_count");
+                                double avg = jsonObject.getDouble("vote_average");
+                                movieDetails.add(new myMovies(title, release, plot, popularity, votes, avg, poster, mthumbnail));
+
+                            }
+                            moviesList = new AndroidImageAdapter(getActivity(), new ArrayList<String>());
+                            gridView.setAdapter(moviesList);
+                            ArrayList<String> imageList = new ArrayList<String>();
+                            for(int i=0;i<movieDetails.size();i++) {
+                                imageList.add(movieDetails.get(i).getMthumbnail());
+                            }
+                            moviesList.clear();
+                            moviesList=new AndroidImageAdapter(getActivity(),imageList);
+                            gridView.setAdapter(moviesList);
+                            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    String showTitle = movieDetails.get(position).getTitle();
+                                    String releaseDate = movieDetails.get(position).getReleaseDate();
+                                    String showPoster = movieDetails.get(position).getPoster_URL();
+                                    String plot = movieDetails.get(position).getPlot();
+                                    double avg = movieDetails.get(position).getAvg();
+                                    Intent intent =  new Intent(getActivity(),DetailActivity.class);
+                                    Bundle extras = new Bundle();
+                                    extras.putString("EXTRA_TITLE",showTitle);
+                                    extras.putString("EXTRA_DATE",releaseDate);
+                                    extras.putString("EXTRA_POSTER",showPoster);
+                                    extras.putString("EXTRA_PLOT",plot);
+                                    extras.putDouble("EXTRA_AVG",avg);
+                                    intent.putExtras(extras);
+                                    startActivity(intent);
+                                }
+
+                            });
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+        Volley.newRequestQueue(getActivity()).add(jsonRequest);
     }
 
 }
