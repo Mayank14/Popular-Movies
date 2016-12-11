@@ -45,6 +45,7 @@ public class movieFragment extends Fragment {
     AndroidImageAdapter moviesList;
     ArrayList<myMovies> movieDetails = new ArrayList<myMovies>();
     String sortby = "popularity";
+    String checkForResume = sortby;
     public movieFragment() {
     }
 
@@ -57,9 +58,12 @@ public class movieFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        checkForResume=sortby;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortby = prefs.getString(getString(R.string.pref_key),getString(R.string.value_popularity));
-        onSort();
+        if(!checkForResume.equals(sortby)) {
+            onSort();
+        }
     }
 
     @Override
